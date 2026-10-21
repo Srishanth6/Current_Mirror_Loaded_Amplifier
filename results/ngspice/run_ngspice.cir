@@ -1,0 +1,21 @@
+* ngspice wrapper: repo netlist with LTspice-only .backanno and analysis lines stripped (analyses re-issued below)
+.include cm_cs_amp_ngspice.net
+.control
+op
+print v(vout) v(nref) v(vin) i(vdd) @m1[id] @m1[gm] @m1[gds] @m3[gds] @m3[id] @m2[id] @m1[vdsat]
+let pwr = -v(vdd)*i(vdd)
+print pwr
+ac dec 20 1 10Meg
+let g = vdb(vout)
+meas ac gain_db FIND vdb(vout) AT=10
+meas ac gain_vv FIND vm(vout) AT=10
+wrdata ac.txt vdb(vout)
+save all @m3[id]
+dc VIN 0.4 0.9 2m
+wrdata dc.txt v(vout) @m3[id]
+* systematic mirror error where VOUT crosses 0.9 V
+let ierr = 100*(@m3[id]-20u)/20u
+meas dc vin_at_0p9 WHEN v(vout)=0.9
+meas dc err_at_0p9 FIND ierr WHEN v(vout)=0.9
+.endc
+.end
