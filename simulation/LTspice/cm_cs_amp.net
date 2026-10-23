@@ -20,10 +20,12 @@ VIN vin 0 0.602 AC 1
 .model NMOD NMOS (LEVEL=1 VTO=0.45 KP=270u LAMBDA=0.08 GAMMA=0.4 PHI=0.7)
 .model PMOD PMOS (LEVEL=1 VTO=-0.45 KP=70u LAMBDA=0.04 GAMMA=0.4 PHI=0.7)
 
-.op
-.dc VIN 0.4 0.9 2m
+* Analyses: LTspice accepts only ONE analysis per run ("More than one
+* analysis specified" otherwise). .ac is active; to switch, put * in front
+* of .ac and .meas and remove the * from the analysis you want.
+*.op
+*.dc VIN 0.4 0.9 2m
 .ac dec 20 1 10Meg
-.meas AC gain_db FIND vdb(vout) AT=10
-
-.backanno
+* LTspice has no vdb(); FIND V(vout) reports the AC value as (dB, phase)
+.meas AC gain_db FIND V(vout) AT=10
 .end

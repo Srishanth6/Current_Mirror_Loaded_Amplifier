@@ -87,14 +87,9 @@ The project includes an LTspice SPICE netlist containing:
 
 The netlist uses a generic Level-1 MOS model and is intended for educational/design-analysis purposes rather than foundry sign-off.
 
-**Run in LTspice:** open `simulation/LTspice/cm_cs_amp.net` in LTspice (File → Open, file type "Netlists"). Two edits are needed first, checked with LTspice 26.1.1 in batch mode (`LTspice.exe -b`):
+**Run in LTspice:** open `simulation/LTspice/cm_cs_amp.net` in LTspice (File → Open, file type "Netlists") and click Run. LTspice accepts only one analysis per run (with several active it stops with `More than one analysis specified.`), so the committed netlist has only `.ac` active; `.op` and `.dc` are commented out with `*`. To switch, comment out `.ac` and `.meas` and uncomment the analysis you want. The gain is measured with `.meas AC gain_db FIND V(vout) AT=10` (LTspice has no `vdb()` function). Checked with LTspice 26.1.1 in batch mode (`LTspice.exe -b cm_cs_amp.net`), which logged `gain_db: V(vout)=(41.3235936703dB,180°) at 10`. The measurement appears in View → SPICE Error Log.
 
-1. As committed, LTspice stops immediately with `More than one analysis specified.` Keep exactly one of `.op`, `.dc` or `.ac` active and comment out the others with `*`.
-2. With only `.ac` active, the `.meas` line fails with `No such function defined.` because LTspice has no `vdb()` function. Use `.meas AC gain_db FIND V(vout) AT=10` instead; LTspice then reports `gain_db: V(vout)=(41.3235936703dB,180°) at 10`, matching the ngspice result. Measurements appear in the SPICE error log (View → SPICE Error Log).
-
-The committed netlist itself is left unchanged.
-
-**ngspice compatibility:** run as-is, ngspice-44.2 stops on `.backanno`, an LTspice-only command it reports as an unimplemented dot command. The original `.meas` line was not tested in ngspice, because the wrapper re-issues an equivalent measurement inside its `.control` block. `results/ngspice/run_ngspice.cir` runs a copy with that line (and the analysis lines, which are re-issued inside a `.control` block) removed:
+**ngspice:** use the separate copy in `results/ngspice/`. The LTspice netlist is not used for ngspice: run directly in ngspice-44.2, its `FIND V(vout)` measurement returns the real part in V/V (`gain_db = -1.164608e+02`), not dB. `results/ngspice/run_ngspice.cir` includes `cm_cs_amp_ngspice.net` (the same circuit without analysis lines) and runs all analyses in a `.control` block; it logs `gain_db = 4.132359e+01`:
 
 ```sh
 cd results/ngspice
