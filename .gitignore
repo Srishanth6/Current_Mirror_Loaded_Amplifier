@@ -1,0 +1,13 @@
+# LTspice / ngspice generated files (keep committed results in results/ngspice/)
+*.raw
+*.log
+!results/ngspice/ngspice_run.log
+*.op.raw
+*.plt
+*.asc.bak
+# Python / editor / OS junk
+__pycache__/
+*.pyc
+.vscode/
+.DS_Store
+Thumbs.db

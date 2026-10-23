@@ -87,6 +87,8 @@ The project includes an LTspice SPICE netlist containing:
 
 The netlist uses a generic Level-1 MOS model and is intended for educational/design-analysis purposes rather than foundry sign-off.
 
+**Run in LTspice:** open `simulation/LTspice/cm_cs_amp.net` in LTspice (File → Open, file type "Netlists") and click Run. The netlist contains several analyses (`.op`, `.dc`, `.ac`); LTspice runs one at a time, so comment out the ones you are not using. The `gain_db` measurement appears in the SPICE error log (View → SPICE Error Log) after the AC run.
+
 **ngspice compatibility:** run as-is, ngspice-44.2 stops on `.backanno`, an LTspice-only command it reports as an unimplemented dot command. The original `.meas` line was not tested in ngspice, because the wrapper re-issues an equivalent measurement inside its `.control` block. `results/ngspice/run_ngspice.cir` runs a copy with that line (and the analysis lines, which are re-issued inside a `.control` block) removed:
 
 ```sh
@@ -100,6 +102,7 @@ python3 plot_results.py                        # writes ngspice_results.png (nee
 ```
 Current_Mirror_Loaded_Amplifier/
 ├── README.md
+├── .gitignore
 ├── calculations/
 │   └── theoretical_analysis.md
 ├── results/
