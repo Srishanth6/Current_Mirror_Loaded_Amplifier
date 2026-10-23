@@ -87,7 +87,12 @@ The project includes an LTspice SPICE netlist containing:
 
 The netlist uses a generic Level-1 MOS model and is intended for educational/design-analysis purposes rather than foundry sign-off.
 
-**Run in LTspice:** open `simulation/LTspice/cm_cs_amp.net` in LTspice (File → Open, file type "Netlists") and click Run. The netlist contains several analyses (`.op`, `.dc`, `.ac`); LTspice runs one at a time, so comment out the ones you are not using. The `gain_db` measurement appears in the SPICE error log (View → SPICE Error Log) after the AC run.
+**Run in LTspice:** open `simulation/LTspice/cm_cs_amp.net` in LTspice (File → Open, file type "Netlists"). Two edits are needed first, checked with LTspice 26.1.1 in batch mode (`LTspice.exe -b`):
+
+1. As committed, LTspice stops immediately with `More than one analysis specified.` Keep exactly one of `.op`, `.dc` or `.ac` active and comment out the others with `*`.
+2. With only `.ac` active, the `.meas` line fails with `No such function defined.` because LTspice has no `vdb()` function. Use `.meas AC gain_db FIND V(vout) AT=10` instead; LTspice then reports `gain_db: V(vout)=(41.3235936703dB,180°) at 10`, matching the ngspice result. Measurements appear in the SPICE error log (View → SPICE Error Log).
+
+The committed netlist itself is left unchanged.
 
 **ngspice compatibility:** run as-is, ngspice-44.2 stops on `.backanno`, an LTspice-only command it reports as an unimplemented dot command. The original `.meas` line was not tested in ngspice, because the wrapper re-issues an equivalent measurement inside its `.control` block. `results/ngspice/run_ngspice.cir` runs a copy with that line (and the analysis lines, which are re-issued inside a `.control` block) removed:
 
