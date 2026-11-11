@@ -132,9 +132,13 @@ Current_Mirror_Loaded_Amplifier/
 ## 👨‍💻 Author
 
 **Srishanth Reddy**  
-B.Tech Electronics & Communication Engineering  
+B.E. Electronics and Communication Engineering  
 Chaitanya Bharathi Institute of Technology (CBIT), Hyderabad
 
 ---
 
 **Focus areas:** Analog IC Design • CMOS • Current Mirrors • SPICE • LTspice • VLSI • MOSFET Small-Signal Analysis
+
+## License
+
+MIT, see [LICENSE](LICENSE). Copyright (c) 2026 B. Srishanth Reddy.
